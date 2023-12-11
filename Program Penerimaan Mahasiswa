@@ -1,0 +1,83 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+struct Mahasiswa {
+    string nama;
+    string jurusan;
+    string mata_kuliah;
+    int nilai;
+};
+
+void tampilkan(Mahasiswa *mhs, int n) {
+    cout << "Daftar mahasiswa:\n";
+    for (int i = 0; i < n; i++) {
+        cout << mhs[i].nama << " - " << mhs[i].jurusan << " - " << mhs[i].mata_kuliah << " - " << mhs[i].nilai << endl;
+    }
+}
+
+bool compare(Mahasiswa a, Mahasiswa b) {
+    return a.nilai > b.nilai;
+}
+
+int main() {
+    int n;
+    cout << "Masukkan jumlah mahasiswa: ";
+    cin >> n;
+
+    Mahasiswa *mhs = new Mahasiswa[n];
+
+    for (int i = 0; i < n; i++) {
+        cout << "Masukkan nama mahasiswa ke-" << i + 1 << ": ";
+        cin >> mhs[i].nama;
+        cout << "Masukkan jurusan (IPA/IPS) mahasiswa ke-" << i + 1 << ": ";
+        cin >> mhs[i].jurusan;
+        cout << "Masukkan mata kuliah mahasiswa ke-" << i + 1 << ": ";
+        if (mhs[i].jurusan == "IPA") {
+            cout << "(Pilihan: MTK, Kimia, Fisika) ";
+        } else if (mhs[i].jurusan == "IPS") {
+            cout << "(Pilihan: PPKN, BING, Sosiologi) ";
+        }
+        cin >> mhs[i].mata_kuliah;
+        cout << "Masukkan nilai mahasiswa ke-" << i + 1 << ": ";
+        cin >> mhs[i].nilai;
+    }
+
+    // Sorting
+    sort(mhs, mhs + n, compare);
+
+    // Searching
+    int cari;
+    cout << "Masukkan rata-rata nilai lulus: ";
+    cin >> cari;
+
+    int idx = -1;
+    for (int i = 0; i < n; i++) {
+        if (mhs[i].nilai == cari) {
+            idx = i;
+            break;
+        }
+    }
+
+    if (idx == -1) {
+        cout << "Nilai tidak ditemukan.\n";
+    } else {
+        cout << "Nilai ditemukan pada indeks ke-" << idx << endl;
+    }
+
+    // Stack & Queue
+    cout << "Masukkan jumlah mahasiswa yang ingin diambil: ";
+    int k;
+    cin >> k;
+
+    cout << "Mahasiswa yang diterima:\n";
+    for (int i = 0; i < k; i++) {
+        cout << mhs[i].nama << " - " << mhs[i].jurusan << " - " << mhs[i].mata_kuliah << " - " << mhs[i].nilai << endl;
+    }
+
+    delete[] mhs;
+
+    return 0;
+}
