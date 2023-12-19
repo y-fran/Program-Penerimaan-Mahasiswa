@@ -1,83 +1,104 @@
-#include <iostream>
-#include <string>
-#include <algorithm>
+#include<iostream>
+#include<algorithm>
 
 using namespace std;
 
-struct Mahasiswa {
+
+
+struct MataPelajaran {
     string nama;
-    string jurusan;
-    string mata_kuliah;
-    int nilai;
+    int skor;
 };
 
-void tampilkan(Mahasiswa *mhs, int n) {
-    cout << "Daftar mahasiswa:\n";
-    for (int i = 0; i < n; i++) {
-        cout << mhs[i].nama << " - " << mhs[i].jurusan << " - " << mhs[i].mata_kuliah << " - " << mhs[i].nilai << endl;
+
+
+struct Anak {
+    string nama;
+    MataPelajaran nilai[7];
+    int totalSkor;
+};
+
+
+void isiNilai(MataPelajaran* mataPelajaran) {
+    for (int i = 0; i < 7; i++) {
+        cout << "Masukkan skor " << mataPelajaran[i].nama << ": ";
+        cin >> mataPelajaran[i].skor;
     }
 }
 
-bool compare(Mahasiswa a, Mahasiswa b) {
-    return a.nilai > b.nilai;
+
+
+int hitungTotalSkor(MataPelajaran* mataPelajaran) {
+    int total = 0;
+    for (int i = 0; i < 7; i++) {
+        total += mataPelajaran[i].skor;
+    }
+    return total;
+}
+
+
+
+
+// Fungsi untuk mencari anak dengan total skor di atas 600
+int cariAnak(Anak* anak, int jumlahAnak) {
+    for (int i = 0; i < jumlahAnak; i++) {
+        if (anak[i].totalSkor > 600) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
+
+void sortAnak(Anak* anak, int jumlahAnak) {
+    for (int i = 0; i < jumlahAnak - 1; i++) {
+        for (int j = 0; j < jumlahAnak - i - 1; j++) {
+            if (anak[j].totalSkor < anak[j + 1].totalSkor) {
+                swap(anak[j], anak[j + 1]);
+            }
+        }
+    }
+}
+
+
+
+
+void tampilkanDataAnak(Anak* anak, int jumlahAnak) {
+    cout << "Data Anak:\n";
+    for (int i = 0; i < jumlahAnak; i++) {
+        cout << "Anak ke-" << i + 1 << ": " << anak[i].nama << " - Total Skor: " << anak[i].totalSkor << "\n";
+    }
 }
 
 int main() {
-    int n;
-    cout << "Masukkan jumlah mahasiswa: ";
-    cin >> n;
+    const int jumlahAnak = 3;
+    Anak anak[jumlahAnak];
+    
+    
 
-    Mahasiswa *mhs = new Mahasiswa[n];
+    for (int i = 0; i < jumlahAnak; i++) {
+        cout << "Masukkan nama anak ke-" << i + 1 << ": ";
+        cin >> anak[i].nama;
 
-    for (int i = 0; i < n; i++) {
-        cout << "Masukkan nama mahasiswa ke-" << i + 1 << ": ";
-        cin >> mhs[i].nama;
-        cout << "Masukkan jurusan (IPA/IPS) mahasiswa ke-" << i + 1 << ": ";
-        cin >> mhs[i].jurusan;
-        cout << "Masukkan mata kuliah mahasiswa ke-" << i + 1 << ": ";
-        if (mhs[i].jurusan == "IPA") {
-            cout << "(Pilihan: MTK, Kimia, Fisika) ";
-        } else if (mhs[i].jurusan == "IPS") {
-            cout << "(Pilihan: PPKN, BING, Sosiologi) ";
-        }
-        cin >> mhs[i].mata_kuliah;
-        cout << "Masukkan nilai mahasiswa ke-" << i + 1 << ": ";
-        cin >> mhs[i].nilai;
+
+
+        isiNilai(anak[i].nilai);
+        anak[i].totalSkor = hitungTotalSkor(anak[i].nilai);
     }
 
-    // Sorting
-    sort(mhs, mhs + n, compare);
 
-    // Searching
-    int cari;
-    cout << "Masukkan rata-rata nilai lulus: ";
-    cin >> cari;
 
-    int idx = -1;
-    for (int i = 0; i < n; i++) {
-        if (mhs[i].nilai == cari) {
-            idx = i;
-            break;
-        }
-    }
+    sortAnak(anak, jumlahAnak);
+    tampilkanDataAnak(anak, jumlahAnak);
 
-    if (idx == -1) {
-        cout << "Nilai tidak ditemukan.\n";
+    int indeksAnakDiterima = cariAnak(anak, jumlahAnak);
+
+    if (indeksAnakDiterima != -1) {
+        cout << "\nAnak yang diterima ke universitas: " << anak[indeksAnakDiterima].nama << "\n";
     } else {
-        cout << "Nilai ditemukan pada indeks ke-" << idx << endl;
+        cout << "\nTidak ada anak yang diterima ke universitas.\n";
     }
-
-    // Stack & Queue
-    cout << "Masukkan jumlah mahasiswa yang ingin diambil: ";
-    int k;
-    cin >> k;
-
-    cout << "Mahasiswa yang diterima:\n";
-    for (int i = 0; i < k; i++) {
-        cout << mhs[i].nama << " - " << mhs[i].jurusan << " - " << mhs[i].mata_kuliah << " - " << mhs[i].nilai << endl;
-    }
-
-    delete[] mhs;
 
     return 0;
 }
