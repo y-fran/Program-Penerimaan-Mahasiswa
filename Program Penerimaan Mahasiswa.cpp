@@ -53,7 +53,7 @@ int main() {
 	cout << "Penerimaan Mahasiswa" << endl;
 	cout << "====================" << endl;
 	
-	cout << "| 1. Matematika      | " << endl;
+	cout << "| 1. Matematika      |" << endl;
 	cout << "| 2. Biologi         |" << endl;
 	cout << "| 3. B.inggris       |" << endl;
 	cout << "| 4. B.Indonesia     |" << endl;
